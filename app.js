@@ -6,9 +6,10 @@
    GLOBAL STATE
    ============================================================ */
 const State = {
-  currentRole: 'bank',
+  currentRole: 'compliance',
   currentPage: 'dashboard',
   selectedClientId: null,
+  clientType: null,
 
   notifications: [
     { id: 1, text: 'New KYC submission from Acme Corp requires review', time: '5 min ago', read: false, type: 'info' },
@@ -134,23 +135,6 @@ const State = {
    ROLE DEFINITIONS
    ============================================================ */
 const ROLES = {
-  bank: {
-    label: 'Bank Admin',
-    description: 'Custodian Bank',
-    initial: 'B',
-    badge: 'Bank',
-    nav: [
-      { section: 'Overview' },
-      { id: 'dashboard', label: 'Dashboard', icon: homeIcon() },
-      { id: 'analytics', label: 'Analytics', icon: barChartIcon(), badge: null },
-      { section: 'Management' },
-      { id: 'clients', label: 'All Clients', icon: usersIcon(), badge: '5' },
-      { id: 'documents', label: 'Documents', icon: fileIcon() },
-      { id: 'audit', label: 'Audit Logs', icon: auditIcon() },
-      { section: 'Administration' },
-      { id: 'settings', label: 'Settings', icon: settingsIcon() },
-    ]
-  },
   compliance: {
     label: 'Compliance Officer',
     description: 'Compliance Dept.',
@@ -159,12 +143,13 @@ const ROLES = {
     nav: [
       { section: 'Review Queue' },
       { id: 'dashboard', label: 'Dashboard', icon: homeIcon() },
-      { id: 'review-queue', label: 'Review Queue', icon: checklistIcon(), badge: '2' },
+      { id: 'review-queue', label: 'Review Queue', icon: checklistIcon(), badge: '8' },
       { id: 'clients', label: 'All Cases', icon: usersIcon() },
       { section: 'Tools' },
       { id: 'documents', label: 'Document Templates', icon: fileIcon() },
       { id: 'audit', label: 'Audit Trail', icon: auditIcon() },
       { id: 'risk', label: 'Risk Ratings', icon: shieldIcon() },
+      { id: 'kyc-form', label: 'KYC Questionnaire', icon: formIcon() },
     ]
   },
   rm: {
@@ -175,39 +160,22 @@ const ROLES = {
     nav: [
       { section: 'My Clients' },
       { id: 'dashboard', label: 'Dashboard', icon: homeIcon() },
+      { id: 'kyc-corrections', label: 'KYC Corrections', icon: checklistIcon(), badge: '3' },
       { id: 'clients', label: 'My Clients', icon: usersIcon(), badge: '2' },
-      { id: 'new-client', label: 'New Onboarding', icon: plusIcon() },
-      { section: 'Documents' },
-      { id: 'documents', label: 'Documents', icon: fileIcon() },
-      { id: 'audit', label: 'Activity Log', icon: auditIcon() },
     ]
   },
   client: {
     label: 'John Smith',
-    description: 'Client (Acme Corp)',
+    description: 'Client',
     initial: 'J',
     badge: 'Client',
     nav: [
       { section: 'My Application' },
       { id: 'dashboard', label: 'Application Status', icon: homeIcon() },
-      { id: 'kyc-form', label: 'KYC Self-Declaration', icon: formIcon() },
-      { id: 'documents', label: 'Documents', icon: fileIcon() },
+      { id: 'client-contract', label: 'Contract Package', icon: fileIcon() },
+      { id: 'client-upload', label: 'Upload Signed Docs', icon: uploadIcon() },
       { section: 'Support' },
       { id: 'audit', label: 'Activity', icon: auditIcon() },
-    ]
-  },
-  assetmanager: {
-    label: 'Asset Manager',
-    description: 'Asset Management',
-    initial: 'A',
-    badge: 'Asset Mgr',
-    nav: [
-      { section: 'Overview' },
-      { id: 'dashboard', label: 'Dashboard', icon: homeIcon() },
-      { id: 'clients', label: 'Client Cases', icon: usersIcon() },
-      { section: 'Data' },
-      { id: 'documents', label: 'Documents', icon: fileIcon() },
-      { id: 'audit', label: 'Activity Log', icon: auditIcon() },
     ]
   }
 };
@@ -339,14 +307,17 @@ function navigateTo(page) {
 
   const titles = {
     dashboard: 'Dashboard',
-    clients: State.currentRole === 'compliance' ? 'All Cases' : State.currentRole === 'rm' ? 'My Clients' : 'All Clients',
+    clients: State.currentRole === 'compliance' ? 'All Cases' : 'My Clients',
     documents: 'Documents',
     audit: 'Audit Trail',
     analytics: 'Analytics',
     settings: 'Settings',
     'review-queue': 'Review Queue',
     'new-client': 'New Client Onboarding',
-    'kyc-form': 'KYC Application Form',
+    'kyc-form': 'KYC Questionnaire',
+    'kyc-corrections': 'KYC Corrections',
+    'client-contract': 'Contract Package',
+    'client-upload': 'Upload Signed Documents',
     risk: 'Risk Ratings',
     'client-detail': 'Client Details',
   };
@@ -365,6 +336,9 @@ function navigateTo(page) {
     case 'review-queue': renderReviewQueue(); break;
     case 'new-client': renderNewClient(); break;
     case 'kyc-form': renderKycForm(); break;
+    case 'kyc-corrections': renderKycCorrections(); break;
+    case 'client-contract': renderClientContract(); break;
+    case 'client-upload': renderClientUpload(); break;
     case 'risk': renderRiskRatings(); break;
     case 'client-detail': renderClientDetail(); break;
   }
@@ -380,17 +354,6 @@ function renderDashboard() {
   if (role === 'client') { renderClientDashboard(); return; }
   if (role === 'compliance') { renderComplianceDashboard(); return; }
   if (role === 'rm') { renderRMDashboard(); return; }
-
-  // Bank dashboard
-  content.innerHTML = `
-    <div class="page-header">
-      <h1>Welcome back, Admin</h1>
-      <p>Here's your compliance overview for today, ${formatDate(new Date())}</p>
-    </div>
-
-    <div class="stats-grid">
-      ${statCard('#6366f1', '5', 'Total Clients', '+2 this month', true, `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>`)}
-      ${statCard('#f59e0b', '2', 'Under Review', '', false, `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>`)}
       ${statCard('#10b981', '1', 'Approved', 'this month', true, `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>`)}
       ${statCard('#ef4444', '1', 'Rejected', '', false, `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`)}
       ${statCard('#8b5cf6', '14', 'Documents Pending', '-3 today', false, `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>`)}
@@ -1391,42 +1354,158 @@ function renderAuditPage() {
    ============================================================ */
 function renderReviewQueue() {
   const content = document.getElementById('page-content');
-  const queue = State.clients.filter(c => c.status === 'under-review' || c.status === 'pending');
+
+  // Mandate data as per spec §4.2 and §4.3
+  const categories = [
+    {
+      name: 'Foundations',
+      icon: '🏛️',
+      mandates: [
+        {
+          id: 'mandate-found-a', clientName: 'Global Ventures Foundation', mandateName: 'Mandate A',
+          country: 'Netherlands', rm: 'J. Smith', risk: 'High', docsApproved: 3, docsTotal: 7,
+          pendingDocs: [
+            { name: 'Source of Funds Narrative', issue: 'Incomplete — narrative not provided', page: 'p. {FOUND_PAGE_01}', priority: 'High', owner: 'J. Smith' },
+            { name: 'Trust Identification Document', issue: 'Missing — no document uploaded', page: 'p. {FOUND_PAGE_02}', priority: 'Medium', owner: 'J. Smith' },
+          ]
+        },
+        {
+          id: 'mandate-found-b', clientName: 'Blue River Education Foundation', mandateName: 'Mandate B',
+          country: 'Switzerland', rm: 'M. Keller', risk: 'Medium', docsApproved: 5, docsTotal: 7,
+          pendingDocs: [
+            { name: 'Beneficiary Control Chart', issue: 'Missing — chart not attached', page: 'p. {FOUND_PAGE_03}', priority: 'Medium', owner: 'M. Keller' },
+          ]
+        },
+      ]
+    },
+    {
+      name: 'Trusts',
+      icon: '⚖️',
+      mandates: [
+        {
+          id: 'mandate-trust-a', clientName: 'Thornton Family Trust', mandateName: 'Mandate A',
+          country: 'Cayman Islands', rm: 'A. Green', risk: 'High', docsApproved: 2, docsTotal: 8,
+          pendingDocs: [
+            { name: 'Settlor Wealth Origin', issue: 'Not documented — needs full narrative', page: 'p. {TRUST_PAGE_01}', priority: 'High', owner: 'A. Green' },
+            { name: 'Protector KYC Passport', issue: 'Copy missing — upload required', page: 'p. {TRUST_PAGE_02}', priority: 'High', owner: 'A. Green' },
+          ]
+        },
+        {
+          id: 'mandate-trust-b', clientName: 'Heritage Legacy Trust', mandateName: 'Mandate B',
+          country: 'Jersey', rm: 'L. Brown', risk: 'Medium', docsApproved: 4, docsTotal: 7,
+          pendingDocs: [
+            { name: 'Trust Deed Annex', issue: 'Not uploaded — annex page missing', page: 'p. {TRUST_PAGE_03}', priority: 'Medium', owner: 'L. Brown' },
+          ]
+        },
+      ]
+    },
+    {
+      name: 'Private Clients',
+      icon: '👤',
+      mandates: [
+        {
+          id: 'mandate-pc-a', clientName: 'Chen Wei', mandateName: 'Personal Mandate',
+          country: 'Singapore', rm: 'Michael Torres', risk: 'Low', docsApproved: 6, docsTotal: 8,
+          pendingDocs: [
+            { name: 'Tax Domicile Evidence', issue: 'Not attached — supporting proof required', page: 'p. {PC_PAGE_01}', priority: 'Medium', owner: 'Michael Torres' },
+          ]
+        },
+        {
+          id: 'mandate-pc-b', clientName: 'Von Wedemeyer Family', mandateName: 'Family Mandate',
+          country: 'Spain', rm: 'Sarah Mitchell', risk: 'Medium', docsApproved: 3, docsTotal: 8,
+          pendingDocs: [
+            { name: 'Wealth Origin Detail', issue: 'Requires clarification — explanation insufficient', page: 'p. {PC_PAGE_02}', priority: 'High', owner: 'Sarah Mitchell' },
+          ]
+        },
+      ]
+    },
+    {
+      name: 'Companies',
+      icon: '🏢',
+      mandates: [
+        {
+          id: 'mandate-co-a', clientName: 'Acme Corporation', mandateName: 'Treasury Mandate',
+          country: 'United Kingdom', rm: 'Sarah Mitchell', risk: 'Medium', docsApproved: 4, docsTotal: 9,
+          pendingDocs: [
+            { name: 'Certificate of Incorporation', issue: 'Latest version missing — outdated copy on file', page: 'p. {CO_PAGE_01}', priority: 'Medium', owner: 'Sarah Mitchell' },
+            { name: 'UBO Declaration', issue: 'Incomplete — section 3 not filled', page: 'p. {CO_PAGE_02}', priority: 'High', owner: 'Sarah Mitchell' },
+            { name: 'Sanctions Screening Attachment', issue: 'Missing — attachment not uploaded', page: 'p. {CO_PAGE_03}', priority: 'Medium', owner: 'Sarah Mitchell' },
+          ]
+        },
+        {
+          id: 'mandate-co-b', clientName: 'Meridian Holdings LLC', mandateName: 'Mandate',
+          country: 'United States', rm: 'Daniel Roth', risk: 'Low', docsApproved: 6, docsTotal: 8,
+          pendingDocs: [
+            { name: 'Commercial Register Extract', issue: 'Outdated — please upload current version', page: 'p. {CO_PAGE_04}', priority: 'Low', owner: 'Daniel Roth' },
+          ]
+        },
+      ]
+    },
+  ];
+
+  const totalPending = categories.reduce((s,c) => s + c.mandates.reduce((ms,m) => ms + m.pendingDocs.length, 0), 0);
 
   content.innerHTML = `
     <div class="page-header">
       <h1>Review Queue</h1>
-      <p>${queue.length} case(s) awaiting compliance review</p>
+      <p>${totalPending} pending document item(s) across all categories</p>
     </div>
-    ${queue.length === 0 ? `
-      <div class="empty-state">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        <p>No cases awaiting review. Great job!</p>
-      </div>
-    ` : queue.map(c => `
-      <div class="card" style="margin-bottom:16px;">
-        <div class="card-header">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <div class="client-avatar" style="background:${clientGradient(c.type)}">${c.name[0]}</div>
-            <div>
-              <div class="card-title">${c.name}</div>
-              <div class="card-subtitle">${c.type} · ${c.country} · Risk: <span class="risk-${c.risk.toLowerCase()}">${c.risk}</span> · RM: ${c.rm}</div>
+
+    ${categories.map(cat => `
+      <div style="margin-bottom:32px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border-default);">
+          <span style="font-size:20px;">${cat.icon}</span>
+          <h2 style="font-size:16px;font-weight:700;color:var(--text-primary);">${cat.name}</h2>
+          <span style="margin-left:auto;font-size:12px;color:var(--text-muted);">${cat.mandates.length} mandate(s)</span>
+        </div>
+
+        ${cat.mandates.map(m => {
+          const progress = Math.round((m.docsApproved / m.docsTotal) * 100);
+          return `
+          <div class="card" style="margin-bottom:14px;">
+            <div class="card-header">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div class="client-avatar" style="background:var(--gradient-brand);">${m.clientName[0]}</div>
+                <div>
+                  <div class="card-title">${m.clientName} <span style="font-weight:400;color:var(--text-secondary);">· ${m.mandateName}</span></div>
+                  <div class="card-subtitle">${m.country} &nbsp;·&nbsp; RM: ${m.rm} &nbsp;·&nbsp; Risk: <span class="risk-${m.risk.toLowerCase()}">${m.risk}</span></div>
+                </div>
+              </div>
+              <div class="actions-row">
+                <button class="btn-secondary btn-sm" onclick="openClientDetail('${m.id}')">Full Review</button>
+                <button class="btn-success btn-sm" onclick="showToast('success','Mandate approved.')">✓ Approve</button>
+                <button class="btn-danger btn-sm" onclick="showToast('warning','Mandate rejected.')">✗ Reject</button>
+                <button class="btn-warning btn-sm" onclick="showToast('info','Info requested from RM.')">Request Info</button>
+              </div>
+            </div>
+            <div class="card-body" style="padding-top:14px;">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                <div class="progress-bar-wrap" style="flex:1;height:8px;"><div class="progress-bar" style="width:${progress}%;background:${progressColor(progress)};"></div></div>
+                <span style="font-size:12px;color:var(--text-muted);white-space:nowrap;">${m.docsApproved}/${m.docsTotal} docs approved</span>
+              </div>
+              ${m.pendingDocs.length > 0 ? `
+                <div style="font-size:12px;font-weight:700;color:var(--accent-orange);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">⚠ Pending Items (${m.pendingDocs.length})</div>
+                ${m.pendingDocs.map(pd => `
+                  <div style="padding:12px 14px;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.25);border-radius:var(--radius-md);margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;">
+                    <div>
+                      <div style="font-size:13.5px;font-weight:600;color:var(--text-primary);margin-bottom:3px;">${pd.name}</div>
+                      <div style="font-size:12px;color:var(--text-secondary);">${pd.issue}</div>
+                      <div style="margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;">
+                        <span style="font-size:11.5px;color:var(--accent-orange);">📄 ${pd.page}</span>
+                        <span style="font-size:11.5px;color:var(--text-muted);">Owner: ${pd.owner}</span>
+                        <span style="font-size:11.5px;color:var(--text-muted);">Due: {DUE_DATE}</span>
+                      </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+                      <span class="status-badge" style="background:rgba(249,115,22,0.12);color:var(--accent-orange);">● Pending</span>
+                      <span style="font-size:11px;padding:2px 8px;border-radius:99px;background:${pd.priority==='High'?'rgba(239,68,68,0.1)':pd.priority==='Medium'?'rgba(245,158,11,0.1)':'rgba(107,114,128,0.1)'};color:${pd.priority==='High'?'var(--accent-red)':pd.priority==='Medium'?'var(--status-pending)':'var(--text-muted)'};">${pd.priority}</span>
+                    </div>
+                  </div>
+                `).join('')}
+              ` : `<div style="font-size:13px;color:var(--accent-green);">✓ No pending items</div>`}
             </div>
           </div>
-          <div class="actions-row">
-            <button class="btn-secondary btn-sm" onclick="openClientDetail('${c.id}')">Full Review</button>
-            <button class="btn-success btn-sm" onclick="approveClient('${c.id}');renderReviewQueue()">✓ Approve</button>
-            <button class="btn-danger btn-sm" onclick="rejectClient('${c.id}');renderReviewQueue()">✗ Reject</button>
-            <button class="btn-warning btn-sm" onclick="requestInfo('${c.id}');showToast('info','Info requested.')">Request Info</button>
-          </div>
-        </div>
-        <div class="card-body" style="padding-top:14px;">
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-bottom:16px;">
-            ${docSummaryMini(c)}
-          </div>
-          <div class="progress-bar-wrap"><div class="progress-bar" style="width:${c.progress}%;background:${progressColor(c.progress)};"></div></div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">${c.progress}% complete · ${c.documents.filter(d=>d.status==='approved').length} of ${c.documents.length} documents approved</div>
-        </div>
+        `}).join('')}
       </div>
     `).join('')}
   `;
@@ -2160,6 +2239,229 @@ function renderKycForm() {
 function submitKyc() {
   showToast('success', 'KYC form submitted successfully! Your compliance team will review your application.');
   setTimeout(() => navigateTo('dashboard'), 1200);
+}
+
+/* ============================================================
+   PAGE: KYC CORRECTIONS (RM view - simplified)
+   ============================================================ */
+function renderKycCorrections() {
+  const content = document.getElementById('page-content');
+  const corrections = [
+    { mandateId: 'M-2026-001', clientName: 'Acme Corporation', issue: 'Passport copy unclear — re-submit high resolution scan', page: 'p. {KYC_PAGE_01}', status: 'pending' },
+    { mandateId: 'M-2026-001', clientName: 'Acme Corporation', issue: 'Tax domicile evidence missing — attach certificate of residence', page: 'p. {KYC_PAGE_02}', status: 'pending' },
+    { mandateId: 'M-2026-001', clientName: 'Acme Corporation', issue: 'Source of wealth explanation incomplete — provide full narrative', page: 'p. {KYC_PAGE_03}', status: 'pending' },
+    { mandateId: 'M-2026-002', clientName: 'Chen Wei', issue: 'Second nationality field left blank — confirm or mark N/A', page: 'p. {KYC_PAGE_04}', status: 'resubmitted' },
+    { mandateId: 'M-2026-003', clientName: 'Von Wedemeyer Family', issue: 'Spouse details missing — required for joint mandate', page: 'p. {KYC_PAGE_05}', status: 'corrected' },
+  ];
+
+  content.innerHTML = `
+    <div class="page-header">
+      <h1>KYC Corrections</h1>
+      <p>Items flagged by Compliance that require client follow-up. You are responsible for coordinating corrections.</p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:20px;">
+      <p>This view shows only the mandate ID and KYC items that must be corrected. Contact the client directly to resolve each issue and update the status once corrected.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">KYC Correction Items</div>
+        <div class="card-subtitle">${corrections.filter(c=>c.status==='pending').length} pending · ${corrections.filter(c=>c.status==='corrected').length} corrected</div>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Mandate ID</th>
+              <th>Client</th>
+              <th>KYC Issue</th>
+              <th>Page Ref.</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${corrections.map(c => `
+              <tr style="${c.status==='pending'?'background:rgba(249,115,22,0.04);':''}">
+                <td style="font-weight:600;color:var(--accent-purple-light);">${c.mandateId}</td>
+                <td>${c.clientName}</td>
+                <td style="color:${c.status==='pending'?'var(--text-primary)':'var(--text-secondary)'};">${c.issue}</td>
+                <td><span style="color:var(--accent-orange);font-size:12px;">${c.page}</span></td>
+                <td>
+                  <span class="status-badge ${c.status==='pending'?'status-pending':c.status==='corrected'?'status-approved':'status-under-review'}">
+                    ${c.status==='pending'?'Pending':c.status==='corrected'?'Corrected':'Resubmitted'}
+                  </span>
+                </td>
+                <td>
+                  ${c.status==='pending' ? `<button class="btn-secondary btn-xs" onclick="showToast('info','Client notified.')">Notify Client</button>` : ''}
+                  ${c.status==='resubmitted' ? `<button class="btn-success btn-xs" onclick="showToast('success','Marked corrected.')">Mark Corrected</button>` : ''}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   PAGE: CLIENT CONTRACT PACKAGE
+   ============================================================ */
+function renderClientContract() {
+  const content = document.getElementById('page-content');
+
+  if (!State.clientType) {
+    // Show client type selector first
+    content.innerHTML = `
+      <div class="page-header">
+        <h1>Select Your Client Type</h1>
+        <p>Please select the category that best describes your situation. This determines your contract package and KYC questions.</p>
+      </div>
+      <div class="grid-2" style="max-width:680px;margin:0 auto;">
+        ${[
+          { type: 'Trust', icon: '⚖️', desc: 'Family or discretionary trust structure' },
+          { type: 'Foundation', icon: '🏛️', desc: 'Private or charitable foundation' },
+          { type: 'Private Person', icon: '👤', desc: 'Individual natural person' },
+          { type: 'Company', icon: '🏢', desc: 'Corporate, LLC or other legal entity' },
+        ].map(opt => `
+          <div class="card" style="cursor:pointer;transition:all .2s;" onclick="State.clientType='${opt.type}';renderClientContract();"
+               onmouseover="this.style.borderColor='var(--accent-purple-light)'" onmouseout="this.style.borderColor=''">
+            <div class="card-body" style="text-align:center;padding:32px 20px;">
+              <div style="font-size:40px;margin-bottom:12px;">${opt.icon}</div>
+              <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:6px;">${opt.type}</div>
+              <div style="font-size:13px;color:var(--text-secondary);">${opt.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="page-header">
+      <h1>Contract Package</h1>
+      <p>Client type: <strong>${State.clientType}</strong> &nbsp;·&nbsp; <button class="btn-secondary btn-sm" onclick="State.clientType=null;renderClientContract();">Change type</button></p>
+    </div>
+
+    <div class="info-box" style="margin-bottom:20px;">
+      <p>📋 Your complete contract package is ready to review. Please read the full document carefully before signing.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Received Contract Package</div>
+          <div class="card-subtitle">One combined document — all forms and agreements for ${State.clientType} onboarding</div>
+        </div>
+        <button class="btn-primary btn-sm" onclick="showToast('info','Contract package downloaded.')">⬇ Download Full Package</button>
+      </div>
+      <div class="card-body">
+        <div class="doc-item" style="background:rgba(110,193,228,0.05);border-color:rgba(110,193,228,0.2);">
+          <div class="doc-icon" style="background:rgba(110,193,228,0.15);color:var(--accent-cyan);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          </div>
+          <div class="doc-info">
+            <div class="doc-name">Full Onboarding Contract Package — ${State.clientType}</div>
+            <div class="doc-meta">Includes: KYC Form · Power of Attorney (Vollmacht) · FIDLEG Categorisation · Investment Profile · Mandate Risk Profile · Form A/T/K/S</div>
+          </div>
+          <div class="doc-actions">
+            <span class="status-badge status-under-review">Received</span>
+            <button class="btn-primary btn-xs" onclick="showToast('info','Package downloaded.')">Download</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;background:rgba(249,115,22,0.04);border-color:rgba(249,115,22,0.2);">
+          <div class="card-body">
+            <div style="font-size:13px;font-weight:700;color:var(--accent-orange);margin-bottom:12px;">📌 Signing Instructions</div>
+            <ol style="padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--text-primary);">
+              <li>Review the full contract package carefully — read every page.</li>
+              <li>Print all pages that require a signature (marked with ✍).</li>
+              <li>Sign where indicated using a pen (wet signature required).</li>
+              <li>Scan the signed pages clearly at minimum 300 DPI.</li>
+              <li>Save as a single PDF and upload in the next step.</li>
+              <li>Ensure all pages are complete and readable before submission.</li>
+            </ol>
+            <div style="margin-top:16px;">
+              <button class="btn-primary" onclick="navigateTo('client-upload')">Proceed to Upload Signed Documents →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   PAGE: CLIENT UPLOAD SIGNED DOCS
+   ============================================================ */
+function renderClientUpload() {
+  const content = document.getElementById('page-content');
+
+  // Submission status mock data
+  const uploads = [
+    { name: 'Signed Contract Package', date: '2026-04-12', status: 'pending', size: '3.4 MB' },
+  ];
+
+  content.innerHTML = `
+    <div class="page-header">
+      <h1>Upload Signed Documents</h1>
+      <p>Upload the scanned, signed version of your contract package for compliance review.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header"><div class="card-title">Upload Instructions</div></div>
+      <div class="card-body">
+        <div class="info-box">
+          <p>Please review the full contract package carefully.<br>
+          Print all pages that require a signature.<br>
+          Sign where indicated.<br>
+          Scan the signed pages clearly.<br>
+          Upload the scanned and signed documents in <strong>PDF format</strong>.<br>
+          Make sure all pages are complete and readable before submission.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div class="card-title">Upload Signed Documents</div>
+        <div class="card-subtitle">PDF only · Physically signed · Max 50MB</div>
+      </div>
+      <div class="card-body">
+        <div class="upload-zone" id="upload-zone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)" onclick="triggerFileInput()">
+          <div style="font-size:40px;margin-bottom:12px;">📤</div>
+          <div class="upload-zone-text">Drag & drop your signed PDF here or click to browse</div>
+          <div class="upload-zone-sub">Upload the complete signed contract package as one PDF</div>
+        </div>
+        <input type="file" id="file-input" style="display:none;" onchange="handleFileSelect(event)" accept=".pdf" />
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Submission Status</div>
+        <div class="card-subtitle">Track the review progress of your submitted documents</div>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>Document</th><th>Submitted</th><th>Size</th><th>Status</th></tr></thead>
+          <tbody>
+            ${uploads.map(u => `
+              <tr>
+                <td style="font-weight:500;">${u.name}</td>
+                <td>${u.date}</td>
+                <td>${u.size}</td>
+                <td><span class="status-badge status-${u.status}">${statusLabel(u.status)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
 /* ============================================================
