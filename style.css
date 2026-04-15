@@ -4,42 +4,42 @@
 
 /* --- Variables & Tokens --- */
 :root {
-  --bg-primary: #0a0b0f;
-  --bg-secondary: #111318;
-  --bg-card: #161a22;
-  --bg-elevated: #1e2330;
-  --bg-input: #1a1f2b;
+  --bg-primary: #00111f;
+  --bg-secondary: #001629;
+  --bg-card: #001e38;
+  --bg-elevated: #002a4a;
+  --bg-input: #001830;
 
-  --border-subtle: rgba(255,255,255,0.06);
-  --border-default: rgba(255,255,255,0.1);
-  --border-strong: rgba(255,255,255,0.18);
+  --border-subtle: rgba(110,193,228,0.08);
+  --border-default: rgba(110,193,228,0.15);
+  --border-strong: rgba(110,193,228,0.28);
 
-  --text-primary: #f0f2f8;
-  --text-secondary: #8892a4;
-  --text-muted: #4f5869;
-  --text-inverse: #0a0b0f;
+  --text-primary: #f0f6ff;
+  --text-secondary: #c3e0e5;
+  --text-muted: #5885af;
+  --text-inverse: #001e54;
 
-  --accent-purple: #7c3aed;
-  --accent-purple-light: #8b5cf6;
-  --accent-purple-glow: rgba(124,58,237,0.25);
-  --accent-indigo: #6366f1;
-  --accent-blue: #3b82f6;
-  --accent-cyan: #06b6d4;
-  --accent-green: #10b981;
+  --accent-purple: #005073;
+  --accent-purple-light: #6ec1e4;
+  --accent-purple-glow: rgba(110,193,228,0.15);
+  --accent-indigo: #41729f;
+  --accent-blue: #5885af;
+  --accent-cyan: #6ec1e4;
+  --accent-green: #61ce70;
   --accent-amber: #f59e0b;
   --accent-red: #ef4444;
   --accent-orange: #f97316;
 
   --status-pending: #f59e0b;
-  --status-pending-bg: rgba(245,158,11,0.12);
-  --status-review: #6366f1;
-  --status-review-bg: rgba(99,102,241,0.12);
-  --status-approved: #10b981;
-  --status-approved-bg: rgba(16,185,129,0.12);
+  --status-pending-bg: rgba(245,158,11,0.10);
+  --status-review: #6ec1e4;
+  --status-review-bg: rgba(110,193,228,0.12);
+  --status-approved: #61ce70;
+  --status-approved-bg: rgba(97,206,112,0.12);
   --status-rejected: #ef4444;
   --status-rejected-bg: rgba(239,68,68,0.12);
-  --status-draft: #6b7280;
-  --status-draft-bg: rgba(107,114,128,0.12);
+  --status-draft: #7b828c;
+  --status-draft-bg: rgba(123,130,140,0.12);
   --status-info-requested: #f97316;
   --status-info-requested-bg: rgba(249,115,22,0.12);
 
@@ -61,8 +61,8 @@
   --transition-base: 250ms ease;
   --transition-slow: 400ms ease;
 
-  --gradient-brand: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%);
-  --gradient-card: linear-gradient(145deg, rgba(99,102,241,0.08) 0%, rgba(124,58,237,0.04) 100%);
+  --gradient-brand: linear-gradient(135deg, #274472 0%, #005073 50%, #41729f 100%);
+  --gradient-card: linear-gradient(145deg, rgba(0,80,115,0.10) 0%, rgba(65,114,159,0.05) 100%);
 }
 
 /* --- Reset & Base --- */
@@ -71,7 +71,7 @@
 html { font-size: 16px; scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
