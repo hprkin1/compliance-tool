@@ -128,7 +128,85 @@ const State = {
       ],
       kyc: {}
     },
-  ]
+  ],
+
+  mandates: [
+    {
+      id: 'mandate-found-a', clientId: 'C004', category: 'Foundations', mandateName: 'Mandate A',
+      country: 'Netherlands', rm: 'J. Smith', risk: 'High', docsApproved: 3, docsTotal: 7, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-found-a-1', name: 'Source of Funds Narrative', issue: 'Incomplete - narrative not provided', page: 'p. {FOUND_PAGE_01}', priority: 'High', owner: 'J. Smith', dueDate: '{DUE_DATE}', status: 'pending' },
+        { id: 'pd-found-a-2', name: 'Trust Identification Document', issue: 'Missing - no document uploaded', page: 'p. {FOUND_PAGE_02}', priority: 'Medium', owner: 'J. Smith', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+    {
+      id: 'mandate-found-b', clientId: 'C004', category: 'Foundations', mandateName: 'Mandate B',
+      country: 'Switzerland', rm: 'M. Keller', risk: 'Medium', docsApproved: 5, docsTotal: 7, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-found-b-1', name: 'Beneficiary Control Chart', issue: 'Missing - chart not attached', page: 'p. {FOUND_PAGE_03}', priority: 'Medium', owner: 'M. Keller', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+    {
+      id: 'mandate-trust-a', clientId: 'C003', category: 'Trusts', mandateName: 'Mandate A',
+      country: 'Cayman Islands', rm: 'A. Green', risk: 'High', docsApproved: 2, docsTotal: 8, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-trust-a-1', name: 'Settlor Wealth Origin', issue: 'Not documented - needs full narrative', page: 'p. {TRUST_PAGE_01}', priority: 'High', owner: 'A. Green', dueDate: '{DUE_DATE}', status: 'pending' },
+        { id: 'pd-trust-a-2', name: 'Protector KYC Passport', issue: 'Copy missing - upload required', page: 'p. {TRUST_PAGE_02}', priority: 'High', owner: 'A. Green', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+    {
+      id: 'mandate-trust-b', clientId: 'C003', category: 'Trusts', mandateName: 'Mandate B',
+      country: 'Jersey', rm: 'L. Brown', risk: 'Medium', docsApproved: 4, docsTotal: 7, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-trust-b-1', name: 'Trust Deed Annex', issue: 'Not uploaded - annex page missing', page: 'p. {TRUST_PAGE_03}', priority: 'Medium', owner: 'L. Brown', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+    {
+      id: 'mandate-pc-a', clientId: 'C002', category: 'Private Clients', mandateName: 'Personal Mandate',
+      country: 'Singapore', rm: 'Michael Torres', risk: 'Low', docsApproved: 6, docsTotal: 8, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-pc-a-1', name: 'Tax Domicile Evidence', issue: 'Not attached - supporting proof required', page: 'p. {PC_PAGE_01}', priority: 'Medium', owner: 'Michael Torres', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+    {
+      id: 'mandate-pc-b', clientId: 'C002', category: 'Private Clients', mandateName: 'Family Mandate',
+      country: 'Spain', rm: 'Sarah Mitchell', risk: 'Medium', docsApproved: 3, docsTotal: 8, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-pc-b-1', name: 'Wealth Origin Detail', issue: 'Requires clarification - explanation insufficient', page: 'p. {PC_PAGE_02}', priority: 'High', owner: 'Sarah Mitchell', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+    {
+      id: 'mandate-co-a', clientId: 'C001', category: 'Companies', mandateName: 'Treasury Mandate',
+      country: 'United Kingdom', rm: 'Sarah Mitchell', risk: 'Medium', docsApproved: 4, docsTotal: 9, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-co-a-1', name: 'Certificate of Incorporation', issue: 'Latest version missing - outdated copy on file', page: 'p. {CO_PAGE_01}', priority: 'Medium', owner: 'Sarah Mitchell', dueDate: '{DUE_DATE}', status: 'pending' },
+        { id: 'pd-co-a-2', name: 'UBO Declaration', issue: 'Incomplete - section 3 not filled', page: 'p. {CO_PAGE_02}', priority: 'High', owner: 'Sarah Mitchell', dueDate: '{DUE_DATE}', status: 'pending' },
+        { id: 'pd-co-a-3', name: 'Sanctions Screening Attachment', issue: 'Missing - attachment not uploaded', page: 'p. {CO_PAGE_03}', priority: 'Medium', owner: 'Sarah Mitchell', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+    {
+      id: 'mandate-co-b', clientId: 'C005', category: 'Companies', mandateName: 'Mandate',
+      country: 'United States', rm: 'Daniel Roth', risk: 'Low', docsApproved: 6, docsTotal: 8, status: 'pending',
+      pendingDocs: [
+        { id: 'pd-co-b-1', name: 'Commercial Register Extract', issue: 'Outdated - please upload current version', page: 'p. {CO_PAGE_04}', priority: 'Low', owner: 'Daniel Roth', dueDate: '{DUE_DATE}', status: 'pending' },
+      ]
+    },
+  ],
+
+  kycCorrections: [
+    { id: 'kyc-c-1', mandateId: 'mandate-co-a', clientId: 'C001', issue: 'Passport copy unclear - re-submit high resolution scan', page: 'p. {KYC_PAGE_01}', status: 'pending' },
+    { id: 'kyc-c-2', mandateId: 'mandate-co-a', clientId: 'C001', issue: 'Tax domicile evidence missing - attach certificate of residence', page: 'p. {KYC_PAGE_02}', status: 'pending' },
+    { id: 'kyc-c-3', mandateId: 'mandate-co-a', clientId: 'C001', issue: 'Source of wealth explanation incomplete - provide full narrative', page: 'p. {KYC_PAGE_03}', status: 'pending' },
+    { id: 'kyc-c-4', mandateId: 'mandate-pc-a', clientId: 'C002', issue: 'Second nationality field left blank - confirm or mark N/A', page: 'p. {KYC_PAGE_04}', status: 'resubmitted' },
+    { id: 'kyc-c-5', mandateId: 'mandate-pc-b', clientId: 'C002', issue: 'Spouse details missing - required for joint mandate', page: 'p. {KYC_PAGE_05}', status: 'corrected' },
+  ],
+
+  clientSubmissions: {
+    C001: [{ id: 'sub-1', name: 'Signed Contract Package', date: '2026-04-12', status: 'pending', size: '3.4 MB' }],
+  },
+
+  riskAnswers: {},
+  riskScores: {}
 };
 
 /* ============================================================
@@ -294,6 +372,55 @@ document.addEventListener('click', e => {
 
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+function nowTs() {
+  return new Date().toLocaleString();
+}
+
+function getMandateById(mandateId) {
+  return State.mandates.find(m => m.id === mandateId);
+}
+
+function getClientByMandateId(mandateId) {
+  const mandate = getMandateById(mandateId);
+  if (!mandate) return null;
+  return State.clients.find(c => c.id === mandate.clientId) || null;
+}
+
+function addClientAudit(clientId, action, type, user) {
+  const client = State.clients.find(c => c.id === clientId);
+  if (!client) return;
+  client.auditTrail.push({
+    action,
+    user: user || (State.currentRole === 'compliance' ? 'Compliance Officer' : State.currentRole === 'rm' ? 'Relationship Manager' : 'Client'),
+    time: nowTs(),
+    type
+  });
+}
+
+function getActiveClientForUpload() {
+  if (State.selectedClientId) {
+    return State.clients.find(c => c.id === State.selectedClientId) || null;
+  }
+  if (State.currentRole === 'client') {
+    return State.clients.find(c => c.id === 'C001') || State.clients[0] || null;
+  }
+  return null;
+}
+
+function ensureClientSubmissionBucket(clientId) {
+  if (!State.clientSubmissions[clientId]) {
+    State.clientSubmissions[clientId] = [];
+  }
+  return State.clientSubmissions[clientId];
+}
+
+function mandateToClientStatus(status) {
+  if (status === 'approved') return 'approved';
+  if (status === 'rejected') return 'rejected';
+  if (status === 'info-requested') return 'info-requested';
+  return 'under-review';
 }
 
 /* ============================================================
@@ -1023,31 +1150,16 @@ function renderClientDocsTab(client) {
   const canUpload = State.currentRole === 'rm' || State.currentRole === 'client';
   const canReview = State.currentRole === 'compliance';
   const isClient = State.currentRole === 'client';
+  const blankDocs = client.documents.filter(d => d.templateAvailable || d.signedVersion === false || d.uploadedBy === 'Compliance');
+  const signedDocs = client.documents.filter(d => d.signedVersion || d.uploadedBy === 'Client' || d.uploadedBy === 'RM');
 
-  return `
-    <div class="card">
+  const section = (title, docs) => `
+    <div class="card" style="margin-bottom:16px;">
       <div class="card-header">
-        <div>
-          <div class="card-title">Document Package</div>
-          <div class="card-subtitle">Templates provided by Compliance · Download, sign physically, scan &amp; re-upload</div>
-        </div>
-        ${canUpload ? `<button class="btn-primary btn-sm" onclick="triggerFileInput()">+ Upload Signed Doc</button>` : ''}
+        <div class="card-title">${title}</div>
       </div>
-      ${isClient ? `
-        <div style="padding:0 22px 16px;">
-          <div class="info-box">
-            <p>📋 <strong>How it works:</strong> (1) Download the blank template &rarr; (2) Print &amp; sign by hand &rarr; (3) Scan to PDF &rarr; (4) Upload here. Electronic signatures are <strong>not</strong> accepted.</p>
-          </div>
-        </div>
-      ` : ''}
       <div class="card-body" style="padding-top:4px;">
-        ${client.documents.length === 0 ? `
-          <div class="upload-zone" onclick="triggerFileInput()">
-            <div class="upload-zone-icon">📄</div>
-            <div class="upload-zone-text">No documents yet</div>
-            <div class="upload-zone-sub">Compliance will upload document templates to get started</div>
-          </div>
-        ` : client.documents.map(d => `
+        ${docs.length === 0 ? `<div style="font-size:13px;color:var(--text-muted);">No documents in this section.</div>` : docs.map(d => `
           <div class="doc-item" style="${d.missingNote ? 'border-color:rgba(249,115,22,0.4);background:rgba(249,115,22,0.03);' : ''}">
             <div class="doc-icon" style="background:${docIconColor(d.type)}22;color:${docIconColor(d.type)}">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
@@ -1071,15 +1183,35 @@ function renderClientDocsTab(client) {
                 <button class="btn-success btn-xs" onclick="approveDoc('${client.id}','${d.id}')">Approve</button>
                 <button class="btn-danger btn-xs" onclick="requestDocInfo('${client.id}','${d.id}')">Request Info</button>
               ` : ''}
-              ${canReview && d.status === 'approved' && d.type !== 'ID Document' ? `
-                <button class="btn-secondary btn-xs" onclick="uploadToAssetmax('${d.id}')">→ Assetmax</button>
-              ` : ''}
               ${canUpload && (d.status === 'draft' || d.status === 'info-requested') ? `
                 <button class="btn-primary btn-xs" onclick="triggerFileInput()">Upload Signed</button>
               ` : ''}
             </div>
           </div>
         `).join('')}
+      </div>
+    </div>
+  `;
+
+  return `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Document Package</div>
+          <div class="card-subtitle">Documents are separated into Blank Documents and Signed Documents for review clarity</div>
+        </div>
+        ${canUpload ? `<button class="btn-primary btn-sm" onclick="triggerFileInput()">+ Upload Signed Doc</button>` : ''}
+      </div>
+      ${isClient ? `
+        <div style="padding:0 22px 16px;">
+          <div class="info-box">
+            <p>📋 <strong>How it works:</strong> (1) Download the blank template &rarr; (2) Print &amp; sign by hand &rarr; (3) Scan to PDF &rarr; (4) Upload here. Electronic signatures are <strong>not</strong> accepted.</p>
+          </div>
+        </div>
+      ` : ''}
+      <div class="card-body" style="padding-top:4px;">
+        ${section('Blank Documents', blankDocs)}
+        ${section('Signed Documents', signedDocs)}
       </div>
     </div>
 
@@ -1186,16 +1318,34 @@ function handleFileSelect(event) {
 }
 
 function simulateUpload(file) {
-  const client = State.clients.find(c => c.id === State.selectedClientId);
-  if (!client) { showToast('success', `Uploaded: ${file.name}`); return; }
+  const client = getActiveClientForUpload();
+  if (!client) {
+    showToast('warning', 'No active client selected for upload.');
+    return;
+  }
+  State.selectedClientId = client.id;
   const newDoc = {
     id: 'D' + Date.now(), name: file.name, type: 'Uploaded Document',
     status: 'pending', uploadedBy: State.currentRole === 'client' ? 'Client' : 'RM',
-    date: new Date().toISOString().slice(0,10), size: (file.size/1024/1024).toFixed(1)+' MB', required: false
+    date: new Date().toISOString().slice(0,10), size: (file.size/1024/1024).toFixed(1)+' MB', required: false,
+    signedVersion: true, templateAvailable: false
   };
   client.documents.push(newDoc);
-  client.auditTrail.push({ action: `Document uploaded: ${file.name}`, user: State.currentRole, time: new Date().toLocaleString(), type: 'uploaded' });
+  const submissions = ensureClientSubmissionBucket(client.id);
+  submissions.unshift({
+    id: `sub-${Date.now()}`,
+    name: file.name,
+    date: new Date().toISOString().slice(0,10),
+    status: 'pending',
+    size: newDoc.size
+  });
+  client.progress = Math.min(client.progress + 10, 95);
+  addClientAudit(client.id, `Document uploaded: ${file.name}`, 'uploaded');
   showToast('success', `${file.name} uploaded successfully.`);
+  if (State.currentPage === 'client-upload') {
+    renderClientUpload();
+    return;
+  }
   renderClientDetail();
   switchTab('docs');
 }
@@ -1226,31 +1376,30 @@ function renderDocuments() {
   const content = document.getElementById('page-content');
   const role = State.currentRole;
   const allDocs = State.clients.flatMap(c => c.documents.map(d => ({ ...d, clientName: c.name, clientId: c.id })));
+  const blankDocs = allDocs.filter(d => d.templateAvailable || d.signedVersion === false || d.uploadedBy === 'Compliance');
+  const signedDocs = allDocs.filter(d => d.signedVersion || d.uploadedBy === 'Client' || d.uploadedBy === 'RM');
 
   content.innerHTML = `
     <div class="page-header">
       <h1>Document Repository</h1>
-      <p>${allDocs.length} documents across all clients</p>
+      <p>${allDocs.length} documents across all clients · grouped into Blank and Signed</p>
     </div>
-    <div class="card">
+    ${renderDocumentSection('Blank Documents', 'Templates and unsigned versions shared with client', blankDocs, role)}
+    ${renderDocumentSection('Signed Documents', 'Scanned and signed files returned by client', signedDocs, role)}
+  `;
+}
+
+function renderDocumentSection(title, subtitle, docs, role) {
+  return `
+    <div class="card" style="margin-bottom:20px;">
       <div class="card-header">
-        <div class="filter-bar">
-          <div class="search-input-wrap">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input class="search-input" placeholder="Search documents..." oninput="filterDocs(this.value)" />
-          </div>
-          <select class="filter-select" id="doc-status-filter" onchange="filterDocs(document.querySelector('.search-input').value)">
-            <option value="">All Status</option>
-            <option value="approved">Approved</option>
-            <option value="pending">Pending</option>
-            <option value="info-requested">Info Requested</option>
-            <option value="rejected">Rejected</option>
-            <option value="draft">Not Submitted</option>
-          </select>
+        <div>
+          <div class="card-title">${title}</div>
+          <div class="card-subtitle">${subtitle}</div>
         </div>
       </div>
       <div style="overflow-x:auto;">
-        <table class="data-table" id="docs-table">
+        <table class="data-table">
           <thead>
             <tr>
               <th>Document</th>
@@ -1263,8 +1412,8 @@ function renderDocuments() {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="docs-tbody">
-            ${renderDocRows(allDocs, role)}
+          <tbody>
+            ${renderDocRows(docs, role)}
           </tbody>
         </table>
       </div>
@@ -1273,11 +1422,13 @@ function renderDocuments() {
 }
 
 function filterDocs(search) {
-  const status = document.getElementById('doc-status-filter').value;
   let allDocs = State.clients.flatMap(c => c.documents.map(d => ({ ...d, clientName: c.name, clientId: c.id })));
-  if (search) allDocs = allDocs.filter(d => d.name.toLowerCase().includes(search.toLowerCase()) || d.clientName.toLowerCase().includes(search.toLowerCase()));
-  if (status) allDocs = allDocs.filter(d => d.status === status);
-  document.getElementById('docs-tbody').innerHTML = renderDocRows(allDocs, State.currentRole);
+  if (search) {
+    allDocs = allDocs.filter(d =>
+      d.name.toLowerCase().includes(search.toLowerCase()) || d.clientName.toLowerCase().includes(search.toLowerCase())
+    );
+  }
+  return allDocs;
 }
 
 function renderDocRows(docs, role) {
@@ -1354,94 +1505,13 @@ function renderAuditPage() {
    ============================================================ */
 function renderReviewQueue() {
   const content = document.getElementById('page-content');
-
-  // Mandate data as per spec §4.2 and §4.3
-  const categories = [
-    {
-      name: 'Foundations',
-      icon: '🏛️',
-      mandates: [
-        {
-          id: 'mandate-found-a', clientName: 'Global Ventures Foundation', mandateName: 'Mandate A',
-          country: 'Netherlands', rm: 'J. Smith', risk: 'High', docsApproved: 3, docsTotal: 7,
-          pendingDocs: [
-            { name: 'Source of Funds Narrative', issue: 'Incomplete — narrative not provided', page: 'p. {FOUND_PAGE_01}', priority: 'High', owner: 'J. Smith' },
-            { name: 'Trust Identification Document', issue: 'Missing — no document uploaded', page: 'p. {FOUND_PAGE_02}', priority: 'Medium', owner: 'J. Smith' },
-          ]
-        },
-        {
-          id: 'mandate-found-b', clientName: 'Blue River Education Foundation', mandateName: 'Mandate B',
-          country: 'Switzerland', rm: 'M. Keller', risk: 'Medium', docsApproved: 5, docsTotal: 7,
-          pendingDocs: [
-            { name: 'Beneficiary Control Chart', issue: 'Missing — chart not attached', page: 'p. {FOUND_PAGE_03}', priority: 'Medium', owner: 'M. Keller' },
-          ]
-        },
-      ]
-    },
-    {
-      name: 'Trusts',
-      icon: '⚖️',
-      mandates: [
-        {
-          id: 'mandate-trust-a', clientName: 'Thornton Family Trust', mandateName: 'Mandate A',
-          country: 'Cayman Islands', rm: 'A. Green', risk: 'High', docsApproved: 2, docsTotal: 8,
-          pendingDocs: [
-            { name: 'Settlor Wealth Origin', issue: 'Not documented — needs full narrative', page: 'p. {TRUST_PAGE_01}', priority: 'High', owner: 'A. Green' },
-            { name: 'Protector KYC Passport', issue: 'Copy missing — upload required', page: 'p. {TRUST_PAGE_02}', priority: 'High', owner: 'A. Green' },
-          ]
-        },
-        {
-          id: 'mandate-trust-b', clientName: 'Heritage Legacy Trust', mandateName: 'Mandate B',
-          country: 'Jersey', rm: 'L. Brown', risk: 'Medium', docsApproved: 4, docsTotal: 7,
-          pendingDocs: [
-            { name: 'Trust Deed Annex', issue: 'Not uploaded — annex page missing', page: 'p. {TRUST_PAGE_03}', priority: 'Medium', owner: 'L. Brown' },
-          ]
-        },
-      ]
-    },
-    {
-      name: 'Private Clients',
-      icon: '👤',
-      mandates: [
-        {
-          id: 'mandate-pc-a', clientName: 'Chen Wei', mandateName: 'Personal Mandate',
-          country: 'Singapore', rm: 'Michael Torres', risk: 'Low', docsApproved: 6, docsTotal: 8,
-          pendingDocs: [
-            { name: 'Tax Domicile Evidence', issue: 'Not attached — supporting proof required', page: 'p. {PC_PAGE_01}', priority: 'Medium', owner: 'Michael Torres' },
-          ]
-        },
-        {
-          id: 'mandate-pc-b', clientName: 'Von Wedemeyer Family', mandateName: 'Family Mandate',
-          country: 'Spain', rm: 'Sarah Mitchell', risk: 'Medium', docsApproved: 3, docsTotal: 8,
-          pendingDocs: [
-            { name: 'Wealth Origin Detail', issue: 'Requires clarification — explanation insufficient', page: 'p. {PC_PAGE_02}', priority: 'High', owner: 'Sarah Mitchell' },
-          ]
-        },
-      ]
-    },
-    {
-      name: 'Companies',
-      icon: '🏢',
-      mandates: [
-        {
-          id: 'mandate-co-a', clientName: 'Acme Corporation', mandateName: 'Treasury Mandate',
-          country: 'United Kingdom', rm: 'Sarah Mitchell', risk: 'Medium', docsApproved: 4, docsTotal: 9,
-          pendingDocs: [
-            { name: 'Certificate of Incorporation', issue: 'Latest version missing — outdated copy on file', page: 'p. {CO_PAGE_01}', priority: 'Medium', owner: 'Sarah Mitchell' },
-            { name: 'UBO Declaration', issue: 'Incomplete — section 3 not filled', page: 'p. {CO_PAGE_02}', priority: 'High', owner: 'Sarah Mitchell' },
-            { name: 'Sanctions Screening Attachment', issue: 'Missing — attachment not uploaded', page: 'p. {CO_PAGE_03}', priority: 'Medium', owner: 'Sarah Mitchell' },
-          ]
-        },
-        {
-          id: 'mandate-co-b', clientName: 'Meridian Holdings LLC', mandateName: 'Mandate',
-          country: 'United States', rm: 'Daniel Roth', risk: 'Low', docsApproved: 6, docsTotal: 8,
-          pendingDocs: [
-            { name: 'Commercial Register Extract', issue: 'Outdated — please upload current version', page: 'p. {CO_PAGE_04}', priority: 'Low', owner: 'Daniel Roth' },
-          ]
-        },
-      ]
-    },
-  ];
+  const categoryOrder = ['Foundations', 'Trusts', 'Private Clients', 'Companies'];
+  const iconMap = { Foundations: '🏛️', Trusts: '⚖️', 'Private Clients': '👤', Companies: '🏢' };
+  const categories = categoryOrder.map(name => ({
+    name,
+    icon: iconMap[name],
+    mandates: State.mandates.filter(m => m.category === name),
+  }));
 
   const totalPending = categories.reduce((s,c) => s + c.mandates.reduce((ms,m) => ms + m.pendingDocs.length, 0), 0);
 
@@ -1465,17 +1535,17 @@ function renderReviewQueue() {
           <div class="card" style="margin-bottom:14px;">
             <div class="card-header">
               <div style="display:flex;align-items:center;gap:12px;">
-                <div class="client-avatar" style="background:var(--gradient-brand);">${m.clientName[0]}</div>
+                <div class="client-avatar" style="background:var(--gradient-brand);">${(getClientByMandateId(m.id)?.name || '?')[0]}</div>
                 <div>
-                  <div class="card-title">${m.clientName} <span style="font-weight:400;color:var(--text-secondary);">· ${m.mandateName}</span></div>
+                  <div class="card-title">${getClientByMandateId(m.id)?.name || m.id} <span style="font-weight:400;color:var(--text-secondary);">· ${m.mandateName}</span></div>
                   <div class="card-subtitle">${m.country} &nbsp;·&nbsp; RM: ${m.rm} &nbsp;·&nbsp; Risk: <span class="risk-${m.risk.toLowerCase()}">${m.risk}</span></div>
                 </div>
               </div>
               <div class="actions-row">
-                <button class="btn-secondary btn-sm" onclick="openClientDetail('${m.id}')">Full Review</button>
-                <button class="btn-success btn-sm" onclick="showToast('success','Mandate approved.')">✓ Approve</button>
-                <button class="btn-danger btn-sm" onclick="showToast('warning','Mandate rejected.')">✗ Reject</button>
-                <button class="btn-warning btn-sm" onclick="showToast('info','Info requested from RM.')">Request Info</button>
+                <button class="btn-secondary btn-sm" onclick="openMandateClientDetail('${m.id}')">Full Review</button>
+                <button class="btn-success btn-sm" onclick="approveMandate('${m.id}')">✓ Approve</button>
+                <button class="btn-danger btn-sm" onclick="rejectMandate('${m.id}')">✗ Reject</button>
+                <button class="btn-warning btn-sm" onclick="requestMandateInfo('${m.id}')">Request Info</button>
               </div>
             </div>
             <div class="card-body" style="padding-top:14px;">
@@ -1493,7 +1563,7 @@ function renderReviewQueue() {
                       <div style="margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;">
                         <span style="font-size:11.5px;color:var(--accent-orange);">📄 ${pd.page}</span>
                         <span style="font-size:11.5px;color:var(--text-muted);">Owner: ${pd.owner}</span>
-                        <span style="font-size:11.5px;color:var(--text-muted);">Due: {DUE_DATE}</span>
+                        <span style="font-size:11.5px;color:var(--text-muted);">Due: ${pd.dueDate || '{DUE_DATE}'}</span>
                       </div>
                     </div>
                     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
@@ -1509,6 +1579,42 @@ function renderReviewQueue() {
       </div>
     `).join('')}
   `;
+}
+
+function openMandateClientDetail(mandateId) {
+  const client = getClientByMandateId(mandateId);
+  if (!client) {
+    showToast('error', 'No client linked to this mandate.');
+    return;
+  }
+  openClientDetail(client.id);
+}
+
+function setMandateReviewStatus(mandateId, status, toastMessage) {
+  const mandate = getMandateById(mandateId);
+  const client = getClientByMandateId(mandateId);
+  if (!mandate || !client) return;
+
+  mandate.status = status;
+  client.status = mandateToClientStatus(status);
+  if (status === 'approved') client.progress = 100;
+  if (status === 'rejected') client.progress = Math.min(client.progress, 80);
+
+  addClientAudit(client.id, `Mandate ${mandate.mandateName} ${status.replace('-', ' ')} by compliance`, status === 'rejected' ? 'rejected' : status === 'approved' ? 'approved' : 'requested');
+  if (toastMessage) showToast(status === 'rejected' ? 'warning' : status === 'approved' ? 'success' : 'info', toastMessage);
+  renderReviewQueue();
+}
+
+function approveMandate(mandateId) {
+  setMandateReviewStatus(mandateId, 'approved', 'Mandate approved.');
+}
+
+function rejectMandate(mandateId) {
+  setMandateReviewStatus(mandateId, 'rejected', 'Mandate rejected.');
+}
+
+function requestMandateInfo(mandateId) {
+  setMandateReviewStatus(mandateId, 'info-requested', 'Additional information requested from Relationship Manager.');
 }
 
 function docSummaryMini(client) {
@@ -1673,7 +1779,26 @@ function defaultDocChecklist() {
 }
 
 function createCase() {
-  showToast('success', 'New client case created. Invitation sent to client email.');
+  const nextId = `C${String(State.clients.length + 1).padStart(3, '0')}`;
+  const typeMap = { individual: 'Individual', corporate: 'Corporate', trust: 'Trust', foundation: 'Foundation', other: 'Corporate' };
+  const selectedType = document.getElementById('new-client-type')?.value || 'corporate';
+  const newClient = {
+    id: nextId,
+    name: `New ${typeMap[selectedType]} Client`,
+    type: typeMap[selectedType],
+    risk: 'Medium',
+    status: 'pending',
+    rm: 'Sarah Mitchell',
+    created: new Date().toISOString().slice(0, 10),
+    progress: 5,
+    country: 'TBD',
+    industry: 'TBD',
+    documents: [],
+    auditTrail: [{ action: 'Case created and client invite sent', user: 'Relationship Manager', time: nowTs(), type: 'created' }],
+    kyc: {}
+  };
+  State.clients.unshift(newClient);
+  showToast('success', `New client case ${nextId} created. Invitation sent to client email.`);
   setTimeout(() => navigateTo('clients'), 1200);
 }
 
@@ -2237,7 +2362,13 @@ function renderKycForm() {
 }
 
 function submitKyc() {
-  showToast('success', 'KYC form submitted successfully! Your compliance team will review your application.');
+  const client = getActiveClientForUpload();
+  if (client) {
+    client.status = 'under-review';
+    client.progress = Math.max(client.progress, 70);
+    addClientAudit(client.id, 'KYC questionnaire submitted for compliance review', 'submitted', 'Client');
+  }
+  showToast('success', 'KYC form submitted successfully. Compliance review has started.');
   setTimeout(() => navigateTo('dashboard'), 1200);
 }
 
@@ -2246,13 +2377,11 @@ function submitKyc() {
    ============================================================ */
 function renderKycCorrections() {
   const content = document.getElementById('page-content');
-  const corrections = [
-    { mandateId: 'M-2026-001', clientName: 'Acme Corporation', issue: 'Passport copy unclear — re-submit high resolution scan', page: 'p. {KYC_PAGE_01}', status: 'pending' },
-    { mandateId: 'M-2026-001', clientName: 'Acme Corporation', issue: 'Tax domicile evidence missing — attach certificate of residence', page: 'p. {KYC_PAGE_02}', status: 'pending' },
-    { mandateId: 'M-2026-001', clientName: 'Acme Corporation', issue: 'Source of wealth explanation incomplete — provide full narrative', page: 'p. {KYC_PAGE_03}', status: 'pending' },
-    { mandateId: 'M-2026-002', clientName: 'Chen Wei', issue: 'Second nationality field left blank — confirm or mark N/A', page: 'p. {KYC_PAGE_04}', status: 'resubmitted' },
-    { mandateId: 'M-2026-003', clientName: 'Von Wedemeyer Family', issue: 'Spouse details missing — required for joint mandate', page: 'p. {KYC_PAGE_05}', status: 'corrected' },
-  ];
+  const corrections = State.kycCorrections.map(item => ({
+    ...item,
+    clientName: State.clients.find(c => c.id === item.clientId)?.name || 'Unknown',
+    mandateLabel: item.mandateId.toUpperCase(),
+  }));
 
   content.innerHTML = `
     <div class="page-header">
@@ -2294,8 +2423,8 @@ function renderKycCorrections() {
                   </span>
                 </td>
                 <td>
-                  ${c.status==='pending' ? `<button class="btn-secondary btn-xs" onclick="showToast('info','Client notified.')">Notify Client</button>` : ''}
-                  ${c.status==='resubmitted' ? `<button class="btn-success btn-xs" onclick="showToast('success','Marked corrected.')">Mark Corrected</button>` : ''}
+                  ${c.status==='pending' ? `<button class="btn-secondary btn-xs" onclick="updateKycCorrectionStatus('${c.id}','resubmitted')">Mark Resubmitted</button>` : ''}
+                  ${c.status==='resubmitted' ? `<button class="btn-success btn-xs" onclick="updateKycCorrectionStatus('${c.id}','corrected')">Mark Corrected</button>` : ''}
                 </td>
               </tr>
             `).join('')}
@@ -2304,6 +2433,15 @@ function renderKycCorrections() {
       </div>
     </div>
   `;
+}
+
+function updateKycCorrectionStatus(correctionId, status) {
+  const correction = State.kycCorrections.find(c => c.id === correctionId);
+  if (!correction) return;
+  correction.status = status;
+  addClientAudit(correction.clientId, `KYC correction "${correction.issue}" marked ${status}`, status === 'corrected' ? 'approved' : 'submitted', 'Relationship Manager');
+  showToast('success', `KYC correction updated to ${status}.`);
+  renderKycCorrections();
 }
 
 /* ============================================================
@@ -2399,16 +2537,17 @@ function renderClientContract() {
    ============================================================ */
 function renderClientUpload() {
   const content = document.getElementById('page-content');
-
-  // Submission status mock data
-  const uploads = [
-    { name: 'Signed Contract Package', date: '2026-04-12', status: 'pending', size: '3.4 MB' },
-  ];
+  const client = getActiveClientForUpload();
+  if (!client) {
+    content.innerHTML = `<div class="card"><div class="card-body"><p class="text-muted">No active client context found for upload.</p></div></div>`;
+    return;
+  }
+  const uploads = ensureClientSubmissionBucket(client.id);
 
   content.innerHTML = `
     <div class="page-header">
       <h1>Upload Signed Documents</h1>
-      <p>Upload the scanned, signed version of your contract package for compliance review.</p>
+      <p>Upload the scanned, signed version of your contract package for compliance review. Client: <strong>${client.name}</strong></p>
     </div>
 
     <div class="card" style="margin-bottom:20px;">
@@ -2440,6 +2579,25 @@ function renderClientUpload() {
       </div>
     </div>
 
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div class="card-title">Received Contract Package</div>
+        <div class="card-subtitle">One complete package sent to client for wet-signature process</div>
+      </div>
+      <div class="card-body">
+        <div class="doc-item">
+          <div class="doc-icon" style="background:rgba(99,102,241,0.14);color:var(--accent-purple-light);">${fileIcon()}</div>
+          <div class="doc-info">
+            <div class="doc-name">Full Onboarding Contract Package</div>
+            <div class="doc-meta">Status: Sent to Client · Format: PDF</div>
+          </div>
+          <div class="doc-actions">
+            <span class="status-badge status-under-review">Received</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-header">
         <div class="card-title">Submission Status</div>
@@ -2449,14 +2607,14 @@ function renderClientUpload() {
         <table class="data-table">
           <thead><tr><th>Document</th><th>Submitted</th><th>Size</th><th>Status</th></tr></thead>
           <tbody>
-            ${uploads.map(u => `
+            ${uploads.length ? uploads.map(u => `
               <tr>
                 <td style="font-weight:500;">${u.name}</td>
                 <td>${u.date}</td>
                 <td>${u.size}</td>
                 <td><span class="status-badge status-${u.status}">${statusLabel(u.status)}</span></td>
               </tr>
-            `).join('')}
+            `).join('') : `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px;">No signed documents uploaded yet.</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -2558,10 +2716,17 @@ function docStatusColor(s) {
    ============================================================ */
 function renderRiskRatings() {
   const content = document.getElementById('page-content');
+  const activeMandateId = State.mandates[0]?.id;
+  const currentAnswers = State.riskAnswers[activeMandateId] || {};
+  const computed = activeMandateId ? computeRiskScore(currentAnswers) : null;
+  if (activeMandateId && computed) {
+    State.riskScores[activeMandateId] = computed;
+  }
+
   content.innerHTML = `
     <div class="page-header">
       <h1>Risk Ratings</h1>
-      <p>Client risk classification overview</p>
+      <p>Client risk classification overview with mandate risk questionnaire</p>
     </div>
     <div class="card">
       <div class="card-header"><div class="card-title">Risk Classification Matrix</div></div>
@@ -2591,6 +2756,72 @@ function renderRiskRatings() {
     </div>
 
     <div class="card">
+      <div class="card-header">
+        <div class="card-title">Mandate Risk Questionnaire</div>
+        <div class="card-subtitle">Questionnaire responses are used to compute Low / Medium / High risk rating</div>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Mandate profile</label>
+            <select onchange="updateRiskAnswer('${activeMandateId}','mandateProfile',this.value)">
+              <option value="">Select</option>
+              <option ${currentAnswers.mandateProfile==='transparent'?'selected':''} value="transparent">Transparent</option>
+              <option ${currentAnswers.mandateProfile==='moderate'?'selected':''} value="moderate">Moderate complexity</option>
+              <option ${currentAnswers.mandateProfile==='opaque'?'selected':''} value="opaque">Opaque / complex</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Source country risk</label>
+            <select onchange="updateRiskAnswer('${activeMandateId}','sourceCountry',this.value)">
+              <option value="">Select</option>
+              <option ${currentAnswers.sourceCountry==='low'?'selected':''} value="low">Low-risk country</option>
+              <option ${currentAnswers.sourceCountry==='medium'?'selected':''} value="medium">Cross-border moderate risk</option>
+              <option ${currentAnswers.sourceCountry==='high'?'selected':''} value="high">High-risk jurisdiction</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Transaction volume (12m)</label>
+            <select onchange="updateRiskAnswer('${activeMandateId}','txVolume',this.value)">
+              <option value="">Select</option>
+              <option ${currentAnswers.txVolume==='low'?'selected':''} value="low">Low</option>
+              <option ${currentAnswers.txVolume==='medium'?'selected':''} value="medium">Medium</option>
+              <option ${currentAnswers.txVolume==='high'?'selected':''} value="high">High</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Structure complexity</label>
+            <select onchange="updateRiskAnswer('${activeMandateId}','structureComplexity',this.value)">
+              <option value="">Select</option>
+              <option ${currentAnswers.structureComplexity==='simple'?'selected':''} value="simple">Simple ownership</option>
+              <option ${currentAnswers.structureComplexity==='moderate'?'selected':''} value="moderate">Moderate complexity</option>
+              <option ${currentAnswers.structureComplexity==='complex'?'selected':''} value="complex">Trust / foundation / layered entities</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>PEP exposure</label>
+            <select onchange="updateRiskAnswer('${activeMandateId}','pep',this.value)">
+              <option value="">Select</option>
+              <option ${currentAnswers.pep==='no'?'selected':''} value="no">No</option>
+              <option ${currentAnswers.pep==='yes'?'selected':''} value="yes">Yes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sanctions flag</label>
+            <select onchange="updateRiskAnswer('${activeMandateId}','sanctions',this.value)">
+              <option value="">Select</option>
+              <option ${currentAnswers.sanctions==='no'?'selected':''} value="no">No</option>
+              <option ${currentAnswers.sanctions==='yes'?'selected':''} value="yes">Yes</option>
+            </select>
+          </div>
+        </div>
+        ${computed ? `<div class="info-box"><p><strong>Computed Risk:</strong> ${computed.level} (score ${computed.score}) · ${computed.reason}</p></div>` : ''}
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-header"><div class="card-title">Risk Criteria Reference</div></div>
       <div class="card-body">
         <div class="grid-3">
@@ -2601,6 +2832,40 @@ function renderRiskRatings() {
       </div>
     </div>
   `;
+}
+
+function updateRiskAnswer(mandateId, field, value) {
+  if (!State.riskAnswers[mandateId]) State.riskAnswers[mandateId] = {};
+  State.riskAnswers[mandateId][field] = value;
+  const score = computeRiskScore(State.riskAnswers[mandateId]);
+  State.riskScores[mandateId] = score;
+  renderRiskRatings();
+}
+
+function computeRiskScore(answers) {
+  let score = 0;
+  if (answers.mandateProfile === 'opaque') score += 3;
+  if (answers.mandateProfile === 'moderate') score += 1;
+  if (answers.sourceCountry === 'high') score += 3;
+  if (answers.sourceCountry === 'medium') score += 1;
+  if (answers.txVolume === 'high') score += 2;
+  if (answers.txVolume === 'medium') score += 1;
+  if (answers.structureComplexity === 'complex') score += 3;
+  if (answers.structureComplexity === 'moderate') score += 1;
+  if (answers.pep === 'yes') score += 3;
+  if (answers.sanctions === 'yes') score += 4;
+
+  let level = 'Low';
+  if (score >= 10) level = 'High';
+  else if (score >= 5) level = 'Medium';
+
+  const reason = level === 'High'
+    ? 'High due to complex structure, jurisdiction/PEP/sanctions exposure, or elevated transaction profile.'
+    : level === 'Medium'
+      ? 'Medium due to moderate cross-border activity or ownership complexity.'
+      : 'Low due to transparent structure and limited exposure indicators.';
+
+  return { score, level, reason };
 }
 
 function riskCriteria(emoji, title, color, items) {
