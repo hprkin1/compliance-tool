@@ -286,6 +286,10 @@ function login() {
   document.getElementById('login-screen').classList.remove('active');
   document.getElementById('main-screen').classList.add('active');
   setupRoleUI(role);
+  if (role === 'client' && !State.clientType) {
+    navigateTo('client-contract');
+    return;
+  }
   navigateTo('dashboard');
 }
 
@@ -719,6 +723,10 @@ function renderRMDashboard() {
 function renderClientDashboard() {
   const content = document.getElementById('page-content');
   const client = State.clients[0]; // C001 = Acme Corp
+  if (!State.clientType) {
+    navigateTo('client-contract');
+    return;
+  }
 
   const steps = [
     { label: 'KYC Form', status: 'done' },
@@ -731,7 +739,17 @@ function renderClientDashboard() {
   content.innerHTML = `
     <div class="page-header">
       <h1>Application Status</h1>
-      <p>Track your onboarding progress for <strong>${client.name}</strong></p>
+      <p>Track your onboarding progress for <strong>${client.name}</strong> · Category: <strong>${State.clientType}</strong></p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;background:rgba(16,185,129,0.06);border-color:rgba(16,185,129,0.24);">
+      <div class="card-body" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:13px;color:var(--accent-green);font-weight:700;">Contract Package Ready</div>
+          <div style="font-size:14px;color:var(--text-primary);margin-top:4px;">Full onboarding package for <strong>${State.clientType}</strong> is prepared and available.</div>
+        </div>
+        <button class="btn-primary btn-sm" onclick="navigateTo('client-contract')">Open Contract Package</button>
+      </div>
     </div>
 
     <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(124,58,237,0.04));border-color:rgba(99,102,241,0.2);">
@@ -769,7 +787,7 @@ function renderClientDashboard() {
       <div class="card">
         <div class="card-header">
           <div class="card-title">Document Status</div>
-          <button class="btn-secondary btn-sm" onclick="navigateTo('documents')">Manage</button>
+          <button class="btn-secondary btn-sm" onclick="navigateTo('client-upload')">Manage</button>
         </div>
         <div class="card-body" style="padding-top:12px;">
           ${client.documents.map(d => `
@@ -2467,7 +2485,7 @@ function renderClientContract() {
           { type: 'Private Person', icon: '👤', desc: 'Individual natural person' },
           { type: 'Company', icon: '🏢', desc: 'Corporate, LLC or other legal entity' },
         ].map(opt => `
-          <div class="card" style="cursor:pointer;transition:all .2s;" onclick="State.clientType='${opt.type}';renderClientContract();"
+          <div class="card" style="cursor:pointer;transition:all .2s;" onclick="State.clientType='${opt.type}';showToast('success','Client category selected: ${opt.type}.');navigateTo('dashboard');"
                onmouseover="this.style.borderColor='var(--accent-purple-light)'" onmouseout="this.style.borderColor=''">
             <div class="card-body" style="text-align:center;padding:32px 20px;">
               <div style="font-size:40px;margin-bottom:12px;">${opt.icon}</div>
